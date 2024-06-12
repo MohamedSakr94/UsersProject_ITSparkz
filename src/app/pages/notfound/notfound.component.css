@@ -1,0 +1,10 @@
+.notfound-conatiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .notfound-conatiner img {
+    width: 50%;
+  }
+  

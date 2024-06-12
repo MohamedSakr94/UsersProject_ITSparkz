@@ -1,0 +1,463 @@
+<form
+  class="mt-8"
+  [formGroup]="registerForm"
+  *ngIf="!editMode"
+  (ngSubmit)="handleSignup($event)"
+>
+  <p-card [header]="cardHeader">
+    <!-- #region Names -->
+    <div class="formgrid grid">
+      <div class="field col-12 col-sm">
+        <label for="firstName">First name</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="firstName"
+          class="w-full"
+          name="firstName"
+          placeholder="Type your First name"
+        />
+        <small
+          *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+          class="block p-error"
+        >
+          <div *ngIf="firstName.hasError('required')">
+            First name is required.
+          </div>
+          <div *ngIf="firstName.hasError('pattern')">Enter a valid Name</div>
+        </small>
+      </div>
+      <div class="field col-12 col-sm">
+        <label for="lastName">Last name</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="lastName"
+          class="w-full"
+          name="lastName"
+          placeholder="Type your Last name"
+        />
+        <small
+          *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+          class="block p-error"
+        >
+          <div *ngIf="lastName.hasError('required')">
+            Last name is required.
+          </div>
+          <div *ngIf="lastName.hasError('pattern')">Enter a valid Name</div>
+        </small>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Email-->
+    <div class="field">
+      <label for="email" class="w-full">Email</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="email"
+        class="w-7"
+        name="email"
+        placeholder="Type your email"
+      />
+      <small
+        *ngIf="email.invalid && (email.dirty || email.touched)"
+        class="block p-error"
+      >
+        <div *ngIf="email.hasError('required')">Email is required.</div>
+        <div *ngIf="email.hasError('email')">Email should be valid</div>
+      </small>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Passwords-->
+    <div class="formgrid grid">
+      <div class="field col-12 col-sm">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          pInputText
+          formControlName="password"
+          class="w-full"
+          name="password"
+          placeholder="Type your password"
+        />
+        <small
+          *ngIf="password.invalid && (password.dirty || password.touched)"
+          class="block p-error"
+        >
+          <div *ngIf="password.hasError('required')">Password is required.</div>
+          <div *ngIf="password.hasError('minlength')">
+            Password length must be longer than 6 characters.
+          </div>
+        </small>
+        <div class="text-sm mt-1" *ngIf="!password.invalid && password?.dirty">
+          <span
+            >Password's strength is
+            <span [ngStyle]="{ color: getColor(passwordStrength) }">{{
+              passwordStrength
+            }}</span></span
+          >
+          <div *ngIf="passwordScore" class="mt-2">
+            <span class="mt-2">To improve password strength use:</span>
+            <ul>
+              <li *ngFor="let condition of conditionNames">{{ condition }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="field col-12 col-sm">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          pInputText
+          formControlName="confirmPassword"
+          class="w-full"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+        />
+        <small
+          *ngIf="
+            confirmPassword.invalid &&
+            (confirmPassword.dirty || confirmPassword.touched)
+          "
+          class="block p-error"
+        >
+          <div *ngIf="confirmPassword.hasError('required')">
+            Confirm the password
+          </div>
+        </small>
+        <small
+          class="block p-error"
+          *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword.valid && password.valid"
+        >
+          Password should match
+        </small>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region check boxes -->
+    <div class="grid mt-3">
+      <div class="col">
+        <p-checkbox
+          formControlName="isAdmin"
+          value="isAdmin"
+          inputId="isAdmin"
+          binary="true"
+        />
+        <label for="isAdmin" class="ms-1">Is Admin?</label>
+      </div>
+
+      <div class="col">
+        <p-checkbox
+          formControlName="isDisabled"
+          value="isDisabled"
+          inputId="isDisabled"
+          binary="true"
+        />
+        <label for="isDisabled" class="ms-1">Is Disabled?</label>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Submit form -->
+    <div class="mt-4 flex justify-content-center" *ngIf="!editMode">
+      <p-button
+        label="Add User"
+        styleClass="w-full"
+        class="me-5"
+        [disabled]="registerForm.invalid"
+        type="submit"
+      ></p-button>
+      <p-button class="ms-4" a routerLink="/login">Cancel </p-button>
+    </div>
+    <!-- #endregion -->
+  </p-card>
+</form>
+
+<form
+  class="mt-8"
+  [formGroup]="updateForm"
+  *ngIf="editMode"
+  (ngSubmit)="handleUpdate($event)"
+>
+  <p-card [header]="cardHeader">
+    <!-- #region Names -->
+    <div class="formgrid grid">
+      <div class="field col-12 col-sm">
+        <label for="firstName_Edit">First name</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="firstName_Edit"
+          class="w-full"
+          name="firstName_Edit"
+          placeholder="Type your First name"
+        />
+        <small
+          *ngIf="
+            firstName_Edit.invalid &&
+            (firstName_Edit.dirty || firstName_Edit.touched)
+          "
+          class="block p-error"
+        >
+          <div *ngIf="firstName_Edit.hasError('required')">
+            First name is required.
+          </div>
+          <div *ngIf="firstName_Edit.hasError('pattern')">
+            Enter a valid Name
+          </div>
+        </small>
+      </div>
+      <div class="field col-12 col-sm">
+        <label for="lastName_Edit">Last name</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="lastName_Edit"
+          class="w-full"
+          name="lastName_Edit"
+          placeholder="Type your Last name"
+        />
+        <small
+          *ngIf="
+            lastName_Edit.invalid &&
+            (lastName_Edit.dirty || lastName_Edit.touched)
+          "
+          class="block p-error"
+        >
+          <div *ngIf="lastName_Edit.hasError('required')">
+            Last name is required.
+          </div>
+          <div *ngIf="lastName_Edit.hasError('pattern')">
+            Enter a valid Name
+          </div>
+        </small>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Email-->
+    <div class="field">
+      <label for="email_Edit" class="w-full">Email</label>
+      <input
+        type="text"
+        pInputText
+        formControlName="email_Edit"
+        class="w-7"
+        name="email_Edit"
+        placeholder="Type your email"
+      />
+      <small
+        *ngIf="email_Edit.invalid && (email_Edit.dirty || email_Edit.touched)"
+        class="block p-error"
+      >
+        <div *ngIf="email_Edit.hasError('required')">Email is required.</div>
+        <div *ngIf="email_Edit.hasError('email')">Email should be valid</div>
+      </small>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Change password-->
+
+    <div>
+      <button
+        class="btn btn-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#changePasswordModal"
+        (click)="changePassword($event)"
+      >
+        Change password
+      </button>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region check boxes -->
+    <div class="grid mt-3">
+      <div class="col">
+        <p-checkbox
+          formControlName="isAdmin_Edit"
+          value="isAdmin"
+          inputId="isAdmin_Edit"
+          binary="true"
+        />
+        <label for="isAdmin_Edit" class="ms-1">Is Admin?</label>
+      </div>
+
+      <div class="col">
+        <p-checkbox
+          formControlName="isDisabled_Edit"
+          value="isDisabled"
+          inputId="isDisabled_Edit"
+          binary="true"
+        />
+        <label for="isDisabled_Edit" class="ms-1">Is Disabled?</label>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Submit Edit form -->
+    <div class="mt-5 flex justify-content-center">
+      <p-button
+        label="Edit User"
+        styleClass="w-full"
+        class="me-5"
+        [disabled]="updateForm.invalid"
+        type="submit"
+      ></p-button>
+      <p-button class="ms-5" a routerLink="/login">Cancel</p-button>
+    </div>
+    <!-- #endregion -->
+  </p-card>
+</form>
+
+<!-- #region Change password modal -->
+<div
+  class="modal fade"
+  id="changePasswordModal"
+  tabindex="-1"
+  aria-labelledby="changePasswordModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="changePasswordModal_Label">
+          Change password?
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm">
+          <div>
+            <label for="oldPassword">Password</label>
+            <input
+              type="password"
+              pInputText
+              formControlName="oldPassword"
+              class="w-full"
+              name="oldPassword"
+              placeholder="Type your old password"
+            />
+            <small
+              *ngIf="
+                oldPassword.invalid &&
+                (oldPassword.dirty || oldPassword.touched)
+              "
+              class="block p-error"
+            >
+              <div *ngIf="oldPassword.hasError('required')">
+                Password is required.
+              </div>
+              <div *ngIf="oldPassword.hasError('minlength')">
+                Password length must be longer than 6 characters.
+              </div>
+            </small>
+          </div>
+          <div class="formgrid grid">
+            <div class="field col-12 col-sm">
+              <label for="newPassword">Password</label>
+              <input
+                type="password"
+                pInputText
+                formControlName="newPassword"
+                class="w-full"
+                name="newPassword"
+                placeholder="Type your new password"
+              />
+              <small
+                *ngIf="
+                  newPassword.invalid &&
+                  (newPassword.dirty || newPassword.touched)
+                "
+                class="block p-error"
+              >
+                <div *ngIf="newPassword.hasError('required')">
+                  Password is required.
+                </div>
+                <div *ngIf="newPassword.hasError('minlength')">
+                  Password length must be longer than 6 characters.
+                </div>
+              </small>
+              <div
+                class="text-sm mt-1"
+                *ngIf="!newPassword.invalid && newPassword?.dirty"
+              >
+                <span
+                  >Password's strength is
+                  <span [ngStyle]="{ color: getColor(passwordStrength) }">{{
+                    passwordStrength
+                  }}</span></span
+                >
+                <div *ngIf="passwordScore" class="mt-2">
+                  <span class="mt-2">To improve password strength use:</span>
+                  <ul>
+                    <li *ngFor="let condition of conditionNames">
+                      {{ condition }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="field col-12 col-sm">
+              <label for="confirmPassword2">Confirm Password</label>
+              <input
+                type="password"
+                pInputText
+                formControlName="confirmPassword2"
+                class="w-full"
+                name="confirmPassword2"
+                placeholder="Confirm Password"
+              />
+              <small
+                *ngIf="
+                  confirmPassword2.invalid &&
+                  (confirmPassword2.dirty || confirmPassword2.touched)
+                "
+                class="block p-error"
+              >
+                <div *ngIf="confirmPassword2.hasError('required')">
+                  Confirm the password
+                </div>
+              </small>
+              <small
+                class="block p-error"
+                *ngIf="changePasswordForm.errors?.['passwordMismatch'] && confirmPassword2.valid && newPassword.valid"
+              >
+                Password should match
+              </small>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="resetPasswordChange()"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="confirmPasswordChange($event)"
+        >
+          Confirm changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- #endregion -->

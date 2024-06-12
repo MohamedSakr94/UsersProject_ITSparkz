@@ -1,0 +1,30 @@
+.legend {
+    /* Style the legend container (optional) */
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .legend ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .legend li {
+    margin-bottom: 5px;
+  }
+  
+  .key {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+  }
+  
+  .disabled {
+    background-color: grey;
+  }
+  
+  .admin {
+    background-color: green;
+  }

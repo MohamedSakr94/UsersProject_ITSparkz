@@ -1,0 +1,9 @@
+.unauthorized-container {
+  margin: 0 auto; /* Center horizontally */
+  text-align: center; /* Center content horizontally (optional) */
+  min-height: 100vh; /* Set a minimum height for the container (optional) */
+}
+img {
+    width: 50%;
+  }
+  
